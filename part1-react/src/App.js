@@ -1,27 +1,32 @@
 import React from 'react'
+// import './estilos.css'
 
-const Title = ({course}) => <h1>{course}</h1>
-const Paragraph = ({part, exer})=> <p>{part} {exer}</p>
+const notes = [
+  {
+    id: 1,
+    content: 'HTML is easy',
+    date: '2019-05-30T17:30:31.098Z',
+    important: true
+  },
+  {
+    id: 2,
+    content: 'Browser can execute only JavaScript',
+    date: '2019-05-30T18:39:34.091Z',
+    important: false
+  },
+  {
+    id: 3,
+    content: 'GET and POST are the most important methods of HTTP protocol',
+    date: '2019-05-30T19:20:14.298Z',
+    important: true
+  }
+]
 const App = () => {
-  const course = 'Half Stack application development'
-  const part1 = 'Fundamentals of React'
-  const exercises1 = 10
-  const part2 = 'Using props to pass data'
-  const exercises2 = 7
-  const part3 = 'State of a component'
-  const exercises3 = 14
-
-  return (
-    <div>
-      <Title course={course}/>
-      <Paragraph part = {part1} exer={exercises1} />
-      <Paragraph part = {part2} exer={exercises2} />
-      <Paragraph part = {part3} exer={exercises3} />
-      <Paragraph part = "Number of exercises" exer={exercises1+exercises2+exercises3} />
-
-      <p>Number of exercises {exercises1 + exercises2 + exercises3}</p>
-    </div>
-  )
+return (
+  <ul>
+    {notes.map(note=><li key={note.id}>{note.id} {note.content}</li>)}
+  </ul>
+)
 }
 
 export default App
