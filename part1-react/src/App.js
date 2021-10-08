@@ -1,5 +1,5 @@
 import React, { useEffect,useState } from 'react'
-
+import axios from 'axios'
 import Note from './Note'
 // import './estilos.css'
 
@@ -12,12 +12,13 @@ const App = () => {
 
   useEffect(()=>{
     setLoading(true)
-    fetch('https://jsonplaceholder.typicode.com/posts')
-    .then(response => response.json())
-    .then(data => {
+    axios.get('https://jsonplaceholder.typicode.com/posts')
+    .then((response)=>{
+      const {data} = response
       setNotes(data)
       setLoading(false)
     })
+
   },[])
 
   const handleChange = (event) =>{
