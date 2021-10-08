@@ -1,13 +1,25 @@
-import React from 'react'
-import {useState} from 'react'
+import React, { useEffect,useState } from 'react'
+
+import Note from './Note'
 // import './estilos.css'
 
 
-const App = (props) => {
+const App = () => {
   
-  const [notes,setNotes] = useState(props.notes)
+  const [notes,setNotes] = useState([])
   const [newNote, setNewNote] = useState('')
-  const [showAll, setShowAll] = useState(true)
+  const [loading, setLoading] = useState(false)
+
+  useEffect(()=>{
+    setLoading(true)
+    fetch('https://jsonplaceholder.typicode.com/posts')
+    .then(response => response.json())
+    .then(data => {
+      setNotes(data)
+      setLoading(false)
+    })
+  },[])
+
   const handleChange = (event) =>{
     setNewNote(event.target.value)
     // const newNote = event.target.value
@@ -17,28 +29,23 @@ const App = (props) => {
     event.preventDefault()
     const noteToAddToState = {
       id: notes.length + 1,
-      content: newNote,
-      date: new Date().toISOString(),
-      important: Math.random() < 0.5
+      title: newNote.length<11?newNote:newNote.slice(0,10),
+      body: newNote,
     }
     // setNotes([...notes,noteToAddToState])
     setNotes(notes.concat(noteToAddToState))
     setNewNote('')
   }
-  const handleShowAll = event =>{
-    setShowAll(()=>!showAll)
-  }
+
   return (
     <div>
       <h1>Notes</h1>
-      <button onClick={handleShowAll}>{showAll?"show only important":'show all'}</button>
-      <ul>
-        {notes.filter(note=>{
-          if(showAll) return true
-          return note.important ===true
-        })
-        .map(note=><li key={note.id}>{note.id} {note.content} {note.date}</li>)}
-      </ul>
+      {loading?'cargando...':''}
+      <ol>
+        {notes.map(note=>(
+          <Note key={note.id} {...note} />
+        ))}
+      </ol>
       <form onSubmit={handleSubmit}>
         <input type='text' onChange={handleChange} value={newNote}/>
         <button >Crear nota</button>
