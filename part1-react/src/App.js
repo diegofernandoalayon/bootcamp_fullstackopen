@@ -10,6 +10,7 @@ const App = () => {
   const [notes,setNotes] = useState([])
   const [newNote, setNewNote] = useState('')
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
   useEffect(()=>{
     setLoading(true)
@@ -35,7 +36,10 @@ const App = () => {
     }
     createNote(noteToAddToState).then((data)=>{
       setNotes(prevNotes=>prevNotes.concat(data))
-    }).catch(error=>console.error(error))
+    }).catch(error=>{
+      console.error(error)
+      setError('La API fallo')
+    })
 
     // setNotes([...notes,noteToAddToState])
     // setNotes(notes.concat(noteToAddToState))
@@ -46,6 +50,7 @@ const App = () => {
     <div>
       <h1>Notes</h1>
       {loading?'cargando...':''}
+      {error ? error:''}
       <ol>
         {notes.map(note=>(
           <Note key={note.id} {...note} />
