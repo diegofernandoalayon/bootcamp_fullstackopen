@@ -1,6 +1,7 @@
 import React, { useEffect,useState } from 'react'
-import axios from 'axios'
 import Note from './Note'
+import { getAllNotes,createNote} from './services/notes'
+
 // import './estilos.css'
 
 
@@ -12,9 +13,8 @@ const App = () => {
 
   useEffect(()=>{
     setLoading(true)
-    axios.get('https://jsonplaceholder.typicode.com/posts')
-    .then((response)=>{
-      const {data} = response
+     
+    getAllNotes().then((data)=>{
       setNotes(data)
       setLoading(false)
     })
@@ -29,12 +29,16 @@ const App = () => {
   const handleSubmit = event =>{
     event.preventDefault()
     const noteToAddToState = {
-      id: notes.length + 1,
       title: newNote.length<11?newNote:newNote.slice(0,10),
       body: newNote,
+      userId: 1
     }
+    createNote(noteToAddToState).then((data)=>{
+      setNotes(prevNotes=>prevNotes.concat(data))
+    }).catch(error=>console.error(error))
+
     // setNotes([...notes,noteToAddToState])
-    setNotes(notes.concat(noteToAddToState))
+    // setNotes(notes.concat(noteToAddToState))
     setNewNote('')
   }
 
