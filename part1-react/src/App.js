@@ -1,4 +1,5 @@
 import React, { useEffect,useState } from 'react'
+import { FormNote } from './components/FormNote'
 import Note from './Note'
 import { getAllNotes,createNote} from './services/notes'
 
@@ -32,7 +33,7 @@ const App = () => {
     const noteToAddToState = {
       title: newNote.length<11?newNote:newNote.slice(0,10),
       body: newNote,
-      userId: 1
+      userId: 1,
     }
     createNote(noteToAddToState).then((data)=>{
       setNotes(prevNotes=>prevNotes.concat(data))
@@ -43,7 +44,9 @@ const App = () => {
 
     // setNotes([...notes,noteToAddToState])
     // setNotes(notes.concat(noteToAddToState))
+   
     setNewNote('')
+  
   }
 
   return (
@@ -56,10 +59,11 @@ const App = () => {
           <Note key={note.id} {...note} />
         ))}
       </ol>
-      <form onSubmit={handleSubmit}>
+      {/* <form onSubmit={handleSubmit}>
         <input type='text' onChange={handleChange} value={newNote}/>
         <button >Crear nota</button>
-      </form>
+      </form> */}
+      <FormNote handleSub={handleSubmit} value={newNote} handleChan={handleChange}/>
     </div>
   )
 }
