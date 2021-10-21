@@ -17,6 +17,7 @@ const App = () => {
     setLoading(true)
      
     getAllNotes().then((data)=>{
+      console.log(data)
       setNotes(data)
       setLoading(false)
     })

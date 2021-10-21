@@ -1,11 +1,11 @@
 
 
-export default function Note ({title,body}){
+export default function Note ({content, important}){
   
     return (
         <li>
-            <p><strong>{title}</strong></p>
-            <small>{body}</small>
+            <p><strong>{content}</strong></p>
+            <small>{String(important)}</small>
         </li>
     )
 }
