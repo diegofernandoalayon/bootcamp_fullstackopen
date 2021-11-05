@@ -3,7 +3,7 @@ import Notification from './components/Notification'
 import { FormNote } from './components/FormNote'
 
 import Note from './Note'
-import { getAllNotes,createNote} from './services/notes'
+import noteService from './services/notes'
 import loginService from './services/login'
 
 // import './estilos.css'
@@ -25,7 +25,8 @@ const App = () => {
   useEffect(()=>{
     setLoading(true)
      
-    getAllNotes().then((data)=>{
+    noteService
+    .getAllNotes().then((data)=>{
       // console.log(data)
       setNotes(data)
       setLoading(false)
@@ -44,10 +45,12 @@ const App = () => {
       content: newNote,
       important: Math.random() > 0.5
     }
-    const {token} = user
-    createNote(noteToAddToState, {token})
+    // const {token} = user
+    noteService
+    .createNote(noteToAddToState)
     .then((data)=>{
       setNotes(prevNotes=>prevNotes.concat(data))
+      setNewNote('')
     }).catch(error=>{
       console.error(error)
       setError('La API fallo')
@@ -56,7 +59,6 @@ const App = () => {
     // setNotes([...notes,noteToAddToState])
     // setNotes(notes.concat(noteToAddToState))
    
-    setNewNote('')
   
   }
   const handleLoginSubmit = (event) =>{
@@ -65,7 +67,7 @@ const App = () => {
       username,
       password
     }).then((user)=>{
-      console.log(user)
+      noteService.setToken(user.token)
       setUser(user)
       setUsername('')
       setPassword('')
