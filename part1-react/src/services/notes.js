@@ -14,8 +14,13 @@ export const getAllNotes = () =>{
     // https://pokeapi.co/api/v2/pokemon/1/
 }
 
-export const createNote = (newNote)=>{
-    return axios.post(baseUrl,newNote)
+export const createNote = (newNote, {token})=>{
+  const config = {
+    headers:{
+      Authorization: `Bearer ${token}`
+    }
+  }
+    return axios.post(baseUrl,newNote, config)
     .then(response=>{
       const {data} = response
       return data

@@ -1,9 +1,14 @@
 import React, { useEffect,useState } from 'react'
+import Notification from './components/Notification'
 import { FormNote } from './components/FormNote'
+
 import Note from './Note'
 import { getAllNotes,createNote} from './services/notes'
+import loginService from './services/login'
 
 // import './estilos.css'
+import './index.css'
+import FormLogin from './components/FormLogin'
 
 
 const App = () => {
@@ -11,13 +16,17 @@ const App = () => {
   const [notes,setNotes] = useState([])
   const [newNote, setNewNote] = useState('')
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
+  const [error, setError] = useState(null)
+
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [user, setUser] = useState(null)
 
   useEffect(()=>{
     setLoading(true)
      
     getAllNotes().then((data)=>{
-      console.log(data)
+      // console.log(data)
       setNotes(data)
       setLoading(false)
     })
@@ -32,11 +41,12 @@ const App = () => {
   const handleSubmit = event =>{
     event.preventDefault()
     const noteToAddToState = {
-      title: newNote.length<11?newNote:newNote.slice(0,10),
-      body: newNote,
-      userId: 1,
+      content: newNote,
+      important: Math.random() > 0.5
     }
-    createNote(noteToAddToState).then((data)=>{
+    const {token} = user
+    createNote(noteToAddToState, {token})
+    .then((data)=>{
       setNotes(prevNotes=>prevNotes.concat(data))
     }).catch(error=>{
       console.error(error)
@@ -49,22 +59,50 @@ const App = () => {
     setNewNote('')
   
   }
+  const handleLoginSubmit = (event) =>{
+    event.preventDefault()
+    loginService.login({
+      username,
+      password
+    }).then((user)=>{
+      console.log(user)
+      setUser(user)
+      setUsername('')
+      setPassword('')
+    }).catch(()=>{
+      setError("Wrong credentials")
+      setUsername('')
+      setPassword('')
+      setTimeout(()=>{
+        setError(null)
+      },5000)
+    })
+  }
 
   return (
     <div>
       <h1>Notes</h1>
       {loading?'cargando...':''}
-      {error ? error:''}
+      {/* {error ? error:''} */}
+      <Notification  message={error}/>
+      {
+        user
+          ? <FormNote handleSub={handleSubmit} value={newNote} handleChan={handleChange}/>
+          : <FormLogin 
+          username={username}
+          password={password}
+          handleLoginSubmit={handleLoginSubmit}
+          handleUsernameChange={({target})=> setUsername(target.value)}
+          handlePasswordChange={({target})=> setPassword(target.value)}
+          />
+      }
+      
       <ol>
         {notes.map(note=>(
           <Note key={note.id} {...note} />
         ))}
       </ol>
-      {/* <form onSubmit={handleSubmit}>
-        <input type='text' onChange={handleChange} value={newNote}/>
-        <button >Crear nota</button>
-      </form> */}
-      <FormNote handleSub={handleSubmit} value={newNote} handleChan={handleChange}/>
+      
     </div>
   )
 }
