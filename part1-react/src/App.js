@@ -34,6 +34,15 @@ const App = () => {
 
   },[])
 
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedNoteAppUser')
+    if ( loggedUserJSON ){
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      noteService.setToken(user.token)
+    }
+  }, [])
+
   const handleChange = (event) =>{
     setNewNote(event.target.value)
     // const newNote = event.target.value
