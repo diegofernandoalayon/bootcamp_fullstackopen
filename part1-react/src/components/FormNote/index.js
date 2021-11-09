@@ -1,4 +1,5 @@
 import {useState} from 'react'
+import Toggleable from '../Toggleable'
 
 
 export function FormNote({addNote}){
@@ -17,15 +18,17 @@ export function FormNote({addNote}){
       addNote(noteObject)
       setNewNote('')
   }
-    return (
-        <form onSubmit={handleSubmit}>
-            <input 
-                type='text' 
-                onChange={handleChange} 
-                value={newNote}
-                placeholder='Write your note content'
-                />
-            <button >Crear nota</button>
-        </form>
-      )
+  return (
+    <Toggleable buttonLabel="New Note">
+      <form onSubmit={handleSubmit}>
+        <input 
+            type='text' 
+            onChange={handleChange} 
+            value={newNote}
+            placeholder='Write your note content'
+            />
+        <button >Crear nota</button>
+      </form>
+    </Toggleable>
+  )
 }
