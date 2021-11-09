@@ -9,12 +9,12 @@ import loginService from './services/login'
 // import './estilos.css'
 import './index.css'
 import FormLogin from './components/FormLogin'
+import Toggleable from './components/Toggleable'
 
 
 const App = () => {
   
   const [notes,setNotes] = useState([])
-  const [newNote, setNewNote] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
@@ -43,32 +43,19 @@ const App = () => {
     }
   }, [])
 
-  const handleChange = (event) =>{
-    setNewNote(event.target.value)
-    // const newNote = event.target.value
-  }
+  
 
-  const handleSubmit = event =>{
-    event.preventDefault()
-    const noteToAddToState = {
-      content: newNote,
-      important: Math.random() > 0.5
-    }
+  const addNote = (noteObject) =>{   
     // const {token} = user
     noteService
-    .createNote(noteToAddToState)
-    .then((data)=>{
-      setNotes(prevNotes=>prevNotes.concat(data))
-      setNewNote('')
-    }).catch(error=>{
-      console.error(error)
-      setError('La API fallo')
-    })
-
-    // setNotes([...notes,noteToAddToState])
-    // setNotes(notes.concat(noteToAddToState))
-   
-  
+      .createNote(noteObject)
+      .then((data)=>{
+        setNotes(prevNotes=>prevNotes.concat(data))
+        // setNewNote('')
+      }).catch(error=>{
+        console.error(error)
+        setError('La API fallo')
+      })
   }
   const handleLoginSubmit = (event) =>{
     event.preventDefault()
@@ -93,6 +80,11 @@ const App = () => {
       },5000)
     })
   }
+  const handleLogout = () => {
+    window.localStorage.removeItem('loggedNoteAppUser')
+    setUser(null)
+    noteService.setToken(user.token)
+  }
 
   return (
     <div>
@@ -102,7 +94,12 @@ const App = () => {
       <Notification  message={error}/>
       {
         user
-          ? <FormNote handleSub={handleSubmit} value={newNote} handleChan={handleChange}/>
+          ? <button onClick={handleLogout}>Logout</button>
+          : null
+      }
+      {
+        user
+          ? <FormNote addNote={addNote}/>
           : <FormLogin 
           username={username}
           password={password}
