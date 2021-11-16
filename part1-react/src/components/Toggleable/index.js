@@ -1,6 +1,6 @@
-import {useState} from 'react'
+import {forwardRef,useState} from 'react'
 
-export default function Toggleable ({children, buttonLabel}){
+const Toggleable = forwardRef(({children, buttonLabel},ref) => {
   const [visible, setVisible] = useState(false)
 
   const hideWhenVisible = { display: visible ? 'none' : ''}
@@ -17,4 +17,5 @@ export default function Toggleable ({children, buttonLabel}){
       </div>
     </div>
     )
-}
+})
+export default Toggleable
