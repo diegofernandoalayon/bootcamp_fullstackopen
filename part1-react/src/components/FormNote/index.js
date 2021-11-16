@@ -18,6 +18,8 @@ export function FormNote({addNote}){
       }
       addNote(noteObject)
       setNewNote('')
+      toggleableRef.current.toggleVisibility()
+
   }
   console.log(toggleableRef)
   return (
