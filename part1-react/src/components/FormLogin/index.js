@@ -1,12 +1,10 @@
 // import { useState } from "react"
 
-import Toggleable from "../Toggleable";
-
-export default function FormLogin({username, password, handleLoginSubmit, ...props}){
- 
-
-  return(
-    <Toggleable buttonLabel={'Show login'}>
+import Toggleable from '../Toggleable'
+import PropTypes from 'prop-types'
+export default function FormLogin ({ username, password, handleLoginSubmit, ...props }) {
+  return (
+    <Toggleable buttonLabel='Show login'>
       <form onSubmit={handleLoginSubmit}>
         <div>
           <input
@@ -15,7 +13,7 @@ export default function FormLogin({username, password, handleLoginSubmit, ...pro
             name='Username'
             placeholder='Username'
             onChange={props.handleUsernameChange}
-            />
+          />
         </div>
         <div>
           <input
@@ -24,15 +22,19 @@ export default function FormLogin({username, password, handleLoginSubmit, ...pro
             name='password'
             placeholder='Password'
             onChange={props.handlePasswordChange}
-            />
+          />
         </div>
         <button>
           Login
         </button>
       </form>
     </Toggleable>
-      
-   
-    
+
   )
+}
+
+FormLogin.prototypes = {
+  handleLoginSubmit: PropTypes.func.isRequired,
+  username: PropTypes.string
+
 }
