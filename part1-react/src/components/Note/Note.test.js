@@ -17,3 +17,12 @@ test('renders content', () => {
   // const li = component.container.querySelector('li')
   // console.log(prettyDOM(li)) // para ver mejor el arbol de elementos
 })
+
+test('clicking the button call event handler once', () => {
+  const note = {
+    content: 'This is a test',
+    important: true
+  }
+  const component = render(<Note content={note.content} important={note.important} />)
+  console.log(component)
+})

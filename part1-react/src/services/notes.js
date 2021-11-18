@@ -31,13 +31,13 @@ const createNote = (newNote) => {
       return data
     })
 }
-const updateNote = (id, newNote) => {
+const updateNote = (id, changedNote) => {
   const config = {
     headers: {
       Authorization: token
     }
   }
-  return axios.put(`${baseUrl}/${id}`, newNote, config)
+  return axios.put(`${baseUrl}/${id}`, changedNote, config)
     .then(response => response.data)
 }
 

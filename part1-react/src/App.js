@@ -52,6 +52,17 @@ const App = () => {
         setError('La API fallo')
       })
   }
+  const toggleImportanceOf = (id) => {
+    const note = notes.find(n => n.id === id)
+    const changedNote = { ...note, important: !note.important }
+
+    noteService
+      .updateNote(id, changedNote)
+      .then(returnedNote => {
+        setNotes(notes.map(note => note.id !== id ? note : returnedNote))
+      })
+    // console.log(changedNote)
+  }
   const handleLoginSubmit = (event) => {
     event.preventDefault()
     loginService.login({
@@ -106,7 +117,7 @@ const App = () => {
 
       <ol>
         {notes.map(note => (
-          <Note key={note.id} {...note} />
+          <Note key={note.id} toggleImportance={() => toggleImportanceOf(note.id)} {...note} />
         ))}
       </ol>
 
