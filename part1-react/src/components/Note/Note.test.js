@@ -1,7 +1,7 @@
 import React from 'react'
 
 import '@testing-library/jest-dom/extend-expect'
-import { render, prettyDOM } from '@testing-library/react'
+import { fireEvent, render } from '@testing-library/react'
 
 import Note from './Note'
 
@@ -12,6 +12,7 @@ test('renders content', () => {
   }
   const component = render(<Note content={note.content} important={note.important} />)
   // component.getByText('This is a test')
+  // component.getByText('make not important')
   expect(component.container).toHaveTextContent(note.content)
   // component.debug()
   // const li = component.container.querySelector('li')
@@ -23,6 +24,13 @@ test('clicking the button call event handler once', () => {
     content: 'This is a test',
     important: true
   }
-  const component = render(<Note content={note.content} important={note.important} />)
-  console.log(component)
+  const mockHandler = jest.fn()
+  const component = render(<Note content={note.content} important={note.important} toggleImportance={mockHandler} />)
+  const button = component.getByText('make not important')
+  fireEvent.click(button)
+  fireEvent.click(button)
+
+  // expect(mockHandler.mock.calls).toHaveLength(1)
+  expect(mockHandler).toHaveBeenCalledTimes(2)
+  // console.log(component)
 })
