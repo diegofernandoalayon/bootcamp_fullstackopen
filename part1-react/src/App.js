@@ -1,8 +1,8 @@
-import React, { useEffect,useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Notification from './components/Notification'
 import { FormNote } from './components/FormNote'
 
-import Note from './Note'
+import Note from './components/Note/Note'
 import noteService from './services/notes'
 import loginService from './services/login'
 
@@ -11,10 +11,8 @@ import './index.css'
 import FormLogin from './components/FormLogin'
 // import Toggleable from './components/Toggleable'
 
-
 const App = () => {
-  
-  const [notes,setNotes] = useState([])
+  const [notes, setNotes] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
@@ -22,47 +20,44 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
 
-  useEffect(()=>{
+  useEffect(() => {
     setLoading(true)
-     
-    noteService
-    .getAllNotes().then((data)=>{
-      // console.log(data)
-      setNotes(data)
-      setLoading(false)
-    })
 
-  },[])
+    noteService
+      .getAllNotes().then((data) => {
+      // console.log(data)
+        setNotes(data)
+        setLoading(false)
+      })
+  }, [])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedNoteAppUser')
-    if ( loggedUserJSON ){
+    if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
       noteService.setToken(user.token)
     }
   }, [])
 
-  
-
-  const addNote = (noteObject) =>{   
+  const addNote = (noteObject) => {
     // const {token} = user
     noteService
       .createNote(noteObject)
-      .then((data)=>{
-        setNotes(prevNotes=>prevNotes.concat(data))
+      .then((data) => {
+        setNotes(prevNotes => prevNotes.concat(data))
         // setNewNote('')
-      }).catch(error=>{
+      }).catch(error => {
         console.error(error)
         setError('La API fallo')
       })
   }
-  const handleLoginSubmit = (event) =>{
+  const handleLoginSubmit = (event) => {
     event.preventDefault()
     loginService.login({
       username,
       password
-    }).then((user)=>{
+    }).then((user) => {
       window.localStorage.setItem(
         'loggedNoteAppUser', JSON.stringify(user)
       )
@@ -71,13 +66,13 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
-    }).catch(()=>{
-      setError("Wrong credentials")
+    }).catch(() => {
+      setError('Wrong credentials')
       setUsername('')
       setPassword('')
-      setTimeout(()=>{
+      setTimeout(() => {
         setError(null)
-      },5000)
+      }, 5000)
     })
   }
   const handleLogout = () => {
@@ -89,9 +84,9 @@ const App = () => {
   return (
     <div>
       <h1>Notes</h1>
-      {loading?'cargando...':''}
+      {loading ? 'cargando...' : ''}
       {/* {error ? error:''} */}
-      <Notification  message={error}/>
+      <Notification message={error} />
       {
         user
           ? <button onClick={handleLogout}>Logout</button>
@@ -99,22 +94,22 @@ const App = () => {
       }
       {
         user
-          ? <FormNote addNote={addNote}/>
-          : <FormLogin 
-          username={username}
-          password={password}
-          handleLoginSubmit={handleLoginSubmit}
-          handleUsernameChange={({target})=> setUsername(target.value)}
-          handlePasswordChange={({target})=> setPassword(target.value)}
-          />
+          ? <FormNote addNote={addNote} />
+          : <FormLogin
+              username={username}
+              password={password}
+              handleLoginSubmit={handleLoginSubmit}
+              handleUsernameChange={({ target }) => setUsername(target.value)}
+              handlePasswordChange={({ target }) => setPassword(target.value)}
+            />
       }
-      
+
       <ol>
-        {notes.map(note=>(
+        {notes.map(note => (
           <Note key={note.id} {...note} />
         ))}
       </ol>
-      
+
     </div>
   )
 }
