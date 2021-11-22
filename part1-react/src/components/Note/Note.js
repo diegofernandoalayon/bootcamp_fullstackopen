@@ -6,7 +6,7 @@ export default function Note ({ content, important, toggleImportance, ...props }
   return (
     <li>
       <p><strong>{content}</strong></p>
-      <small>{String(important)}</small>
+      <small><strong>{String(important)}</strong></small>
       <button onClick={toggleImportance}>{label}</button>
     </li>
   )
