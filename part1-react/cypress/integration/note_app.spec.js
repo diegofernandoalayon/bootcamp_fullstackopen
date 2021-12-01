@@ -52,17 +52,31 @@ describe('Note App', () => {
 
     describe.only('and a note exists', () => {
       beforeEach(() => {
-        cy.createNote({ content: 'A note created from cypress', important: false })
+        cy.createNote({
+          content: 'A note created from cypress',
+          important: false
+        })
+        cy.createNote({
+          content: 'hola mundo',
+          important: false
+        })
+        cy.createNote({
+          content: 'todo',
+          important: false
+        })
       })
 
       it('can be made important', () => {
+        cy.get('li')
+          .should('contain', 'A note created from cypress').as('theNote')
+
         cy
-          .get('li')
-          .should('contain', 'A note created from cypress')
+          .get('@theNote')
           .contains('make important').click()
-          // .contains('A note created from cypress')
-          // .contains('make important')
-        // cy.contains('make important')
+
+        cy
+          .get('@theNote')
+          .contains('make not important')
       })
     })
   })
