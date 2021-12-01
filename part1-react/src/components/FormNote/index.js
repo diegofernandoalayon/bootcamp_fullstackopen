@@ -13,7 +13,7 @@ export function FormNote ({ addNote }) {
     event.preventDefault()
     const noteObject = {
       content: newNote,
-      important: Math.random() > 0.5
+      important: false
     }
     addNote(noteObject)
     setNewNote('')

@@ -27,28 +27,43 @@ describe('Note App', () => {
     cy.contains('Create a new note')
   })
 
-  it.only('login fails with wrong password', () => {
+  it('login fails with wrong password', () => {
     cy.contains('Show login').click()
     cy.get('[placeholder=Username]').type('dfar')
     cy.get('[placeholder=Password]').type('dfar9aa8')
     cy.get('#form-login-button').click()
 
-    cy.contains('Wrong credentials')
+    // cy.get('.error').contains('Wrong credentials')
+    cy.get('.error')
+      .should('contain', 'Wrong credentials')
   })
 
   describe('when logged in', () => {
+    // usarlo de esta manera para saltarnos la UI y tener menos problemas
     beforeEach(() => {
-      cy.contains('Show login').click()
-      cy.get('[placeholder=Username]').type('dfar')
-      cy.get('[placeholder=Password]').type('dfar98')
-      cy.get('#form-login-button').click()
-      cy.contains('Create a new note')
+      cy.login({ username: 'dfar', password: 'dfar98' })
     })
     it('a new note can be created', () => {
       cy.contains('New Note').click()
       cy.get('input').type('a note created by cypress')
       cy.contains('Crear nota').click()
       cy.contains('a note created by cypress')
+    })
+
+    describe.only('and a note exists', () => {
+      beforeEach(() => {
+        cy.createNote({ content: 'A note created from cypress', important: false })
+      })
+
+      it('can be made important', () => {
+        cy
+          .get('li')
+          .should('contain', 'A note created from cypress')
+          .contains('make important').click()
+          // .contains('A note created from cypress')
+          // .contains('make important')
+        // cy.contains('make important')
+      })
     })
   })
 })
