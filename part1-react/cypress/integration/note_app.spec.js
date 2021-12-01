@@ -50,7 +50,7 @@ describe('Note App', () => {
       cy.contains('a note created by cypress')
     })
 
-    describe.only('and a note exists', () => {
+    describe('and a note exists', () => {
       beforeEach(() => {
         cy.createNote({
           content: 'A note created from cypress',
@@ -60,6 +60,7 @@ describe('Note App', () => {
           content: 'hola mundo',
           important: false
         })
+        // cy.debug()
         cy.createNote({
           content: 'todo',
           important: false
