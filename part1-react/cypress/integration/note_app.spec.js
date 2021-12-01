@@ -26,6 +26,16 @@ describe('Note App', () => {
     cy.get('#form-login-button').click()
     cy.contains('Create a new note')
   })
+
+  it.only('login fails with wrong password', () => {
+    cy.contains('Show login').click()
+    cy.get('[placeholder=Username]').type('dfar')
+    cy.get('[placeholder=Password]').type('dfar9aa8')
+    cy.get('#form-login-button').click()
+
+    cy.contains('Wrong credentials')
+  })
+
   describe('when logged in', () => {
     beforeEach(() => {
       cy.contains('Show login').click()
